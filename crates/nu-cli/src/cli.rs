@@ -574,6 +574,7 @@ pub fn set_rustyline_configuration() -> (Editor<Helper>, IndexMap<String, Value>
     rl.set_bell_style(rustyline::config::BellStyle::default());
     rl.set_color_mode(rustyline::ColorMode::Enabled);
     rl.set_tab_stop(8);
+    rl.set_history_search_behaviour(rustyline::config::HistorySearchBehaviour::PrefixReverseSearch);
 
     if let Err(e) = crate::keybinding::load_keybindings(&mut rl) {
         println!("Error loading keybindings: {:?}", e);
@@ -697,6 +698,14 @@ pub fn set_rustyline_configuration() -> (Editor<Helper>, IndexMap<String, Value>
                         if let Ok(tab_stop) = value.as_u64() {
                             rl.set_tab_stop(tab_stop as usize);
                         }
+                    }
+                    "history_search_behaviour" => {
+                        let history_search_behaviour = match value.as_string() {
+                            Ok(s) if s.to_lowercase() == "line_by_line" => rustyline::config::HistorySearchBehaviour::LineByLine,
+                            Ok(s) if s.to_lowercase() == "prefix_reverse_search" => rustyline::config::HistorySearchBehaviour::PrefixReverseSearch,
+                            _ => rustyline::config::HistorySearchBehaviour::LineByLine,
+                        };
+                        rl.set_history_search_behaviour(history_search_behaviour);
                     }
                     _ => (),
                 }
