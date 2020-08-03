@@ -701,8 +701,12 @@ pub fn set_rustyline_configuration() -> (Editor<Helper>, IndexMap<String, Value>
                     }
                     "history_search_behaviour" => {
                         let history_search_behaviour = match value.as_string() {
-                            Ok(s) if s.to_lowercase() == "line_by_line" => rustyline::config::HistorySearchBehaviour::LineByLine,
-                            Ok(s) if s.to_lowercase() == "prefix_reverse_search" => rustyline::config::HistorySearchBehaviour::PrefixReverseSearch,
+                            Ok(s) if s.to_lowercase() == "line_by_line" => {
+                                rustyline::config::HistorySearchBehaviour::LineByLine
+                            }
+                            Ok(s) if s.to_lowercase() == "prefix_reverse_search" => {
+                                rustyline::config::HistorySearchBehaviour::PrefixReverseSearch
+                            }
                             _ => rustyline::config::HistorySearchBehaviour::LineByLine,
                         };
                         rl.set_history_search_behaviour(history_search_behaviour);
